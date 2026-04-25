@@ -1,0 +1,25 @@
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+
+export default function Holder() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const wallet = window.ethereum.selectedAddress;
+
+    axios.get(`http://localhost:5000/api/credentials/${wallet}`)
+      .then(res => setData(res.data));
+  }, []);
+
+  return (
+    <div>
+      <h2>Your Certificates</h2>
+      {data.map((item, i) => (
+        <div key={i}>
+          <p>{item.hash}</p>
+          <a href={item.ipfsUrl} target="_blank">View</a>
+        </div>
+      ))}
+    </div>
+  );
+}
